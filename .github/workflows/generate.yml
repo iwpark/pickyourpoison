@@ -1,0 +1,49 @@
+name: Generate results
+
+# Run from the repo's Actions tab: "Generate results" → "Run workflow".
+# Needs a repository secret named HOPSCOTCH_API_KEY.
+
+on:
+  workflow_dispatch:
+    inputs:
+      check_only:
+        description: "Only check model IDs (no tokens spent)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-results
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HOPSCOTCH_API_KEY: ${{ secrets.HOPSCOTCH_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check model IDs
+        run: node scripts/check-models.mjs
+
+      - name: Query all models
+        if: ${{ !inputs.check_only }}
+        run: node scripts/generate.mjs
+
+      - name: Commit results
+        if: ${{ !inputs.check_only }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/results.json
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update results ($(date -u +%Y-%m-%d))"
+          git push

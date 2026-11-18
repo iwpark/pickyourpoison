@@ -35,3 +35,4 @@ for (const m of CONFIG.models) {
   console.log(`         close matches: ${close.slice(0, 12).join(", ") || "none"}`);
 }
 console.log(missing ? `\n${missing} ID(s) need fixing in config.js.` : "\nAll model IDs found. Ready for scripts/generate.mjs.");
+if (missing) process.exit(1); // stops the GitHub Action before any tokens are spent
