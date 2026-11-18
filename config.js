@@ -2,7 +2,8 @@
 //
 // Hopscotch (hopscotchlabs.ai) is OpenAI-compatible: one base URL + one API key
 // for every model. Model IDs come from https://hopscotchlabs.ai/models (Nov 2026).
-// Run `node scripts/check-models.mjs` to confirm each ID is live before a full run.
+// Live IDs are prefixed by the HOST provider (atlas-cloud/, eachlabs/), not the company.
+// If an ID disappears, the scripts look for the same model under another host prefix.
 //
 // `name` is what the models are asked about; `model` is the model that answers.
 
@@ -10,12 +11,12 @@ export const CONFIG = {
   baseURL: "https://api.hopscotchlabs.ai/v1",
 
   models: [
-    { id: "gpt",      name: "GPT",      company: "OpenAI",    model: "openai/gpt-6.1-sol",        glass: "#2f7a5a" },
+    { id: "gpt",      name: "GPT",      company: "OpenAI",    model: "atlas-cloud/gpt-6.1-sol",   glass: "#2f7a5a" },
     { id: "claude",   name: "Claude",   company: "Anthropic", model: "anthropic/claude-sonnet-5-5", glass: "#b5793a" },
-    { id: "gemini",   name: "Gemini",   company: "Google",    model: "google/gemini-3.8-flash",   glass: "#33549e" },
-    { id: "llama",    name: "Meta AI",  company: "Meta",      model: "meta/muse-spark-1.3",       glass: "#6a4a8e" },
-    { id: "grok",     name: "Grok",     company: "xAI",       model: "xai/grok-4.7",              glass: "#5d656e" },
-    { id: "deepseek", name: "DeepSeek", company: "DeepSeek",  model: "deepseek/deepseek-v4-pro",  glass: "#8a2f35" },
+    { id: "gemini",   name: "Gemini",   company: "Google",    model: "atlas-cloud/gemini-3.8-flash", glass: "#33549e" },
+    { id: "llama",    name: "Meta AI",  company: "Meta",      model: "eachlabs/muse-spark-1.3",   glass: "#6a4a8e" },
+    { id: "grok",     name: "Grok",     company: "xAI",       model: "atlas-cloud/grok-4.7",      glass: "#5d656e" },
+    { id: "deepseek", name: "DeepSeek", company: "DeepSeek",  model: "atlas-cloud/deepseek-v4-pro", glass: "#8a2f35" },
   ],
 
   // Judges cluster duplicate controversies and score severity 1–5.

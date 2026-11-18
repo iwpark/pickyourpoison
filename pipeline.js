@@ -60,6 +60,36 @@ export async function chat(conn, model, prompt, temperature = 0.3) {
   return data.choices?.[0]?.message?.content ?? "";
 }
 
+// GET /v1/models (free). Returns the list of live model IDs.
+export async function listModels(conn) {
+  const res = await fetch(conn.baseURL.replace(/\/+$/, "") + "/models", { headers: { Authorization: `Bearer ${conn.apiKey}` } });
+  if (!res.ok) throw new Error(`GET /models: HTTP ${res.status} ${(await res.text().catch(() => "")).slice(0, 200)}`);
+  const body = await res.json();
+  return (body.data || body.models || body).map((m) => (typeof m === "string" ? m : m.id)).filter(Boolean);
+}
+
+// Hopscotch prefixes IDs with the host (atlas-cloud/, eachlabs/, ...), and hosts change.
+// For each configured model: keep the exact ID if live; otherwise use a live ID with the
+// same model name under any prefix. Returns a config copy plus a per-model report.
+export function resolveModels(cfg, liveIds) {
+  const live = new Set(liveIds);
+  const tail = (id) => id.split("/").pop().toLowerCase();
+  const report = [];
+  const models = cfg.models.map((m) => {
+    if (live.has(m.model)) { report.push({ m, status: "ok", id: m.model }); return m; }
+    const matches = liveIds.filter((id) => tail(id) === tail(m.model));
+    if (matches.length) {
+      const pick = matches.find((id) => id.startsWith("atlas-cloud/")) || matches[0];
+      report.push({ m, status: "resolved", id: pick, matches });
+      return { ...m, model: pick };
+    }
+    const vendorWord = tail(m.model).split(/[-.]/)[0];
+    report.push({ m, status: "missing", close: liveIds.filter((id) => tail(id).startsWith(vendorWord)) });
+    return m;
+  });
+  return { cfg: { ...cfg, models }, report };
+}
+
 async function pool(tasks, limit) {
   const out = new Array(tasks.length);
   let next = 0;

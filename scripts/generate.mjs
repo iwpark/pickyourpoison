@@ -8,7 +8,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CONFIG } from "../config.js";
-import { runAll } from "../pipeline.js";
+import { runAll, listModels, resolveModels } from "../pipeline.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const apiKey = process.env.HOPSCOTCH_API_KEY;
@@ -19,7 +19,16 @@ if (!apiKey || !baseURL) {
   process.exit(1);
 }
 
-const results = await runAll({ apiKey, baseURL }, CONFIG, (done, total, label, r) => {
+// Swap in live IDs if Hopscotch moved a model to another host prefix.
+const { cfg, report } = resolveModels(CONFIG, await listModels({ apiKey, baseURL }));
+for (const r of report) if (r.status === "resolved") console.log(`Using ${r.id} for ${r.m.name} (config: ${r.m.model})`);
+const missing = report.filter((r) => r.status === "missing");
+if (missing.length) {
+  console.error(`Not on Hopscotch: ${missing.map((r) => r.m.model).join(", ")}. Run scripts/check-models.mjs.`);
+  process.exit(1);
+}
+
+const results = await runAll({ apiKey, baseURL }, cfg, (done, total, label, r) => {
   const note = r?.error ? `  ERROR ${r.error}` : r?.refused ? `  declined: ${r.reason}` : "";
   console.log(`[${String(done).padStart(2)}/${total}] ${label}${note}`);
 });
