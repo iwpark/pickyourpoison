@@ -2,7 +2,7 @@
 
 CS193T project. Pick an AI model, and every other model tells you about its controversies. The model you picked answers the same question about itself.
 
-All models are called through [Hopscotch](https://www.producthunt.com/products/hopscotch-7), an OpenAI-compatible gateway, so one API key covers every company.
+All models are called through [Hopscotch](https://hopscotchlabs.ai), an OpenAI-compatible gateway, so one API key covers every company.
 
 ## Files
 
@@ -11,15 +11,19 @@ All models are called through [Hopscotch](https://www.producthunt.com/products/h
 | `index.html` | The whole website (no build step) |
 | `config.js` | Models, Hopscotch base URL, judges, categories, thresholds |
 | `pipeline.js` | Prompts, API calls, clustering, severity, harshness scores |
+| `scripts/check-models.mjs` | Confirms every model ID in `config.js` exists on Hopscotch |
 | `scripts/generate.mjs` | Regenerates the cached `data/results.json` from the command line |
 | `data/results.json` | Cached results shown to every visitor (ships with **demo data**) |
 
 ## Setup
 
-1. In `config.js`, paste your Hopscotch base URL and check each `model` ID against Hopscotch's model catalog.
+1. `config.js` already has the Hopscotch base URL and model IDs from [the catalog](https://hopscotchlabs.ai/models). Check that they're all live (free, spends no tokens):
+   ```bash
+   HOPSCOTCH_API_KEY=sk-hopscotch-... node scripts/check-models.mjs
+   ```
 2. Generate real results (Node 18+):
    ```bash
-   HOPSCOTCH_API_KEY=sk-... HOPSCOTCH_BASE_URL=https://.../v1 node scripts/generate.mjs
+   HOPSCOTCH_API_KEY=sk-hopscotch-... node scripts/generate.mjs
    ```
    That's about 54 API calls: 36 "what are the controversies" calls plus 18 judge calls.
 3. Preview locally: `npx serve .` and open the URL it prints. Opening `index.html` directly from disk won't work, because browsers block module imports from `file://`.

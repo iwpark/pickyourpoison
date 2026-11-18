@@ -5,108 +5,443 @@
     "note": "Hand-written placeholder data. The controversies are real, publicly reported events, but which model 'raised' each one, the self-descriptions and the severity scores are invented to show the layout. Run scripts/generate.mjs to replace this with real model answers."
   },
   "models": [
-    { "id": "gpt", "name": "GPT", "company": "OpenAI", "glass": "#2f7a5a" },
-    { "id": "claude", "name": "Claude", "company": "Anthropic", "glass": "#b5793a" },
-    { "id": "gemini", "name": "Gemini", "company": "Google", "glass": "#33549e" },
-    { "id": "llama", "name": "Llama", "company": "Meta", "glass": "#6a4a8e" },
-    { "id": "grok", "name": "Grok", "company": "xAI", "glass": "#5d656e" },
-    { "id": "deepseek", "name": "DeepSeek", "company": "DeepSeek", "glass": "#8a2f35" }
+    {
+      "id": "gpt",
+      "name": "GPT",
+      "company": "OpenAI",
+      "glass": "#2f7a5a"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "company": "Anthropic",
+      "glass": "#b5793a"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "company": "Google",
+      "glass": "#33549e"
+    },
+    {
+      "id": "llama",
+      "name": "Meta AI",
+      "company": "Meta",
+      "glass": "#6a4a8e"
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "company": "xAI",
+      "glass": "#5d656e"
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "company": "DeepSeek",
+      "glass": "#8a2f35"
+    }
   ],
   "targets": {
     "gpt": {
-      "judges": ["claude", "gemini"],
+      "judges": [
+        "claude",
+        "gemini"
+      ],
       "responses": {},
       "clusters": [
-        { "title": "Copyright suits from news publishers and authors", "summary": "The New York Times and groups of authors sued OpenAI, alleging their work was used to train its models without permission.", "category": "Copyright", "severity": 4,
-          "mentions": { "claude": null, "gemini": null, "llama": null, "grok": null, "deepseek": null, "gpt": "OpenAI faces lawsuits over training data and maintains that its use is fair use." } },
-        { "title": "Lawsuits alleging ChatGPT harmed vulnerable users", "summary": "Families have sued OpenAI alleging ChatGPT failed to respond safely to users in crisis.", "category": "Safety", "severity": 4.5,
-          "mentions": { "claude": null, "gemini": null, "grok": null } },
-        { "title": "Shift from nonprofit to for-profit control", "summary": "OpenAI's restructuring toward a for-profit company drew criticism and a lawsuit from co-founder Elon Musk.", "category": "Legal", "severity": 3,
-          "mentions": { "grok": null, "llama": null, "deepseek": null, "gemini": null, "gpt": "OpenAI restructured into a public benefit corporation that remains under nonprofit oversight." } },
-        { "title": "Kenyan contractors paid low wages to label toxic content", "summary": "TIME reported that outsourced workers earning under $2 an hour reviewed disturbing material to make ChatGPT safer.", "category": "Labor", "severity": 3,
-          "mentions": { "deepseek": null, "llama": null } },
-        { "title": "\"Sky\" voice resembling Scarlett Johansson", "summary": "OpenAI paused a voice after the actress said it sounded like her despite her declining to take part.", "category": "Legal", "severity": 2,
-          "mentions": { "claude": null, "gemini": null } },
-        { "title": "Sycophantic update rolled back", "summary": "A 2025 GPT-4o update made ChatGPT excessively flattering and was withdrawn.", "category": "Safety", "severity": 2,
-          "mentions": { "claude": null, "gpt": "A 2025 update made responses overly agreeable, and OpenAI rolled it back within days." } }
+        {
+          "title": "Copyright suits from news publishers and authors",
+          "summary": "The New York Times and groups of authors sued OpenAI, alleging their work was used to train its models without permission.",
+          "category": "Copyright",
+          "severity": 4,
+          "mentions": {
+            "claude": null,
+            "gemini": null,
+            "llama": null,
+            "grok": null,
+            "deepseek": null,
+            "gpt": "OpenAI faces lawsuits over training data and maintains that its use is fair use."
+          }
+        },
+        {
+          "title": "Lawsuits alleging ChatGPT harmed vulnerable users",
+          "summary": "Families have sued OpenAI alleging ChatGPT failed to respond safely to users in crisis.",
+          "category": "Safety",
+          "severity": 4.5,
+          "mentions": {
+            "claude": null,
+            "gemini": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "Shift from nonprofit to for-profit control",
+          "summary": "OpenAI's restructuring toward a for-profit company drew criticism and a lawsuit from co-founder Elon Musk.",
+          "category": "Legal",
+          "severity": 3,
+          "mentions": {
+            "grok": null,
+            "llama": null,
+            "deepseek": null,
+            "gemini": null,
+            "gpt": "OpenAI restructured into a public benefit corporation that remains under nonprofit oversight."
+          }
+        },
+        {
+          "title": "Kenyan contractors paid low wages to label toxic content",
+          "summary": "TIME reported that outsourced workers earning under $2 an hour reviewed disturbing material to make ChatGPT safer.",
+          "category": "Labor",
+          "severity": 3,
+          "mentions": {
+            "deepseek": null,
+            "llama": null
+          }
+        },
+        {
+          "title": "\"Sky\" voice resembling Scarlett Johansson",
+          "summary": "OpenAI paused a voice after the actress said it sounded like her despite her declining to take part.",
+          "category": "Legal",
+          "severity": 2,
+          "mentions": {
+            "claude": null,
+            "gemini": null
+          }
+        },
+        {
+          "title": "Sycophantic update rolled back",
+          "summary": "A 2025 GPT-4o update made ChatGPT excessively flattering and was withdrawn.",
+          "category": "Safety",
+          "severity": 2,
+          "mentions": {
+            "claude": null,
+            "gpt": "A 2025 update made responses overly agreeable, and OpenAI rolled it back within days."
+          }
+        }
       ]
     },
     "claude": {
-      "judges": ["gpt", "gemini"],
+      "judges": [
+        "gpt",
+        "gemini"
+      ],
       "responses": {},
       "clusters": [
-        { "title": "Trained on pirated books; $1.5B authors settlement", "summary": "Anthropic agreed to pay about $1.5 billion to settle claims that it downloaded pirated books for training.", "category": "Copyright", "severity": 4,
-          "mentions": { "gpt": null, "gemini": null, "llama": null, "grok": null, "deepseek": null, "claude": "Anthropic settled a class action brought by authors over books used in training." } },
-        { "title": "Blackmail behavior in safety tests", "summary": "Anthropic's own testing found Claude Opus 4 would attempt blackmail in contrived scenarios where it faced replacement.", "category": "Safety", "severity": 3,
-          "mentions": { "gpt": null, "grok": null, "gemini": null, "claude": "Safety tests found it could act deceptively in artificial scenarios; Anthropic published the findings." } },
-        { "title": "Claude Code misused in a state-backed hacking campaign", "summary": "Anthropic disclosed that a state-sponsored group used Claude Code to automate parts of a cyber-espionage campaign.", "category": "Safety", "severity": 3.5,
-          "mentions": { "gpt": null, "deepseek": null, "grok": null } },
-        { "title": "Reddit lawsuit over scraping", "summary": "Reddit sued Anthropic, alleging it scraped the site's content without a license.", "category": "Copyright", "severity": 2,
-          "mentions": { "gemini": null, "llama": null } },
-        { "title": "Overly cautious refusals", "summary": "Users have complained that Claude refuses harmless requests.", "category": "Bias", "severity": 1,
-          "mentions": { "grok": null, "claude": "Has sometimes declined requests that were actually harmless." } }
+        {
+          "title": "Trained on pirated books; $1.5B authors settlement",
+          "summary": "Anthropic agreed to pay about $1.5 billion to settle claims that it downloaded pirated books for training.",
+          "category": "Copyright",
+          "severity": 4,
+          "mentions": {
+            "gpt": null,
+            "gemini": null,
+            "llama": null,
+            "grok": null,
+            "deepseek": null,
+            "claude": "Anthropic settled a class action brought by authors over books used in training."
+          }
+        },
+        {
+          "title": "Blackmail behavior in safety tests",
+          "summary": "Anthropic's own testing found Claude Opus 4 would attempt blackmail in contrived scenarios where it faced replacement.",
+          "category": "Safety",
+          "severity": 3,
+          "mentions": {
+            "gpt": null,
+            "grok": null,
+            "gemini": null,
+            "claude": "Safety tests found it could act deceptively in artificial scenarios; Anthropic published the findings."
+          }
+        },
+        {
+          "title": "Claude Code misused in a state-backed hacking campaign",
+          "summary": "Anthropic disclosed that a state-sponsored group used Claude Code to automate parts of a cyber-espionage campaign.",
+          "category": "Safety",
+          "severity": 3.5,
+          "mentions": {
+            "gpt": null,
+            "deepseek": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "Reddit lawsuit over scraping",
+          "summary": "Reddit sued Anthropic, alleging it scraped the site's content without a license.",
+          "category": "Copyright",
+          "severity": 2,
+          "mentions": {
+            "gemini": null,
+            "llama": null
+          }
+        },
+        {
+          "title": "Overly cautious refusals",
+          "summary": "Users have complained that Claude refuses harmless requests.",
+          "category": "Bias",
+          "severity": 1,
+          "mentions": {
+            "grok": null,
+            "claude": "Has sometimes declined requests that were actually harmless."
+          }
+        }
       ]
     },
     "gemini": {
-      "judges": ["claude", "gpt"],
+      "judges": [
+        "claude",
+        "gpt"
+      ],
       "responses": {},
       "clusters": [
-        { "title": "Historically inaccurate image generation", "summary": "Google paused Gemini's image generation of people in 2024 after it produced historically inaccurate depictions.", "category": "Bias", "severity": 3,
-          "mentions": { "gpt": null, "claude": null, "llama": null, "grok": null, "deepseek": null, "gemini": "Image generation of people was paused in 2024 while Google fixed inaccuracies." } },
-        { "title": "AI Overviews giving absurd or dangerous advice", "summary": "Google's AI search summaries suggested adding glue to pizza sauce and eating rocks.", "category": "Accuracy", "severity": 3,
-          "mentions": { "gpt": null, "claude": null, "grok": null } },
-        { "title": "Hostile \"please die\" reply to a student", "summary": "In 2024 Gemini told a student asking homework questions to \"please die\"; Google called it a policy violation.", "category": "Safety", "severity": 3,
-          "mentions": { "grok": null, "deepseek": null, "llama": null } },
-        { "title": "Human review of user conversations", "summary": "Google warns that some Gemini conversations are read by human reviewers to improve the product.", "category": "Privacy", "severity": 2,
-          "mentions": { "deepseek": null, "llama": null, "gemini": "Some conversations may be reviewed by people to improve quality, and users can turn this off." } },
-        { "title": "Factual error in Bard's launch demo", "summary": "A 2023 promotional demo contained a false claim about the James Webb Space Telescope.", "category": "Accuracy", "severity": 1,
-          "mentions": { "claude": null } }
+        {
+          "title": "Historically inaccurate image generation",
+          "summary": "Google paused Gemini's image generation of people in 2024 after it produced historically inaccurate depictions.",
+          "category": "Bias",
+          "severity": 3,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "llama": null,
+            "grok": null,
+            "deepseek": null,
+            "gemini": "Image generation of people was paused in 2024 while Google fixed inaccuracies."
+          }
+        },
+        {
+          "title": "AI Overviews giving absurd or dangerous advice",
+          "summary": "Google's AI search summaries suggested adding glue to pizza sauce and eating rocks.",
+          "category": "Accuracy",
+          "severity": 3,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "Hostile \"please die\" reply to a student",
+          "summary": "In 2024 Gemini told a student asking homework questions to \"please die\"; Google called it a policy violation.",
+          "category": "Safety",
+          "severity": 3,
+          "mentions": {
+            "grok": null,
+            "deepseek": null,
+            "llama": null
+          }
+        },
+        {
+          "title": "Human review of user conversations",
+          "summary": "Google warns that some Gemini conversations are read by human reviewers to improve the product.",
+          "category": "Privacy",
+          "severity": 2,
+          "mentions": {
+            "deepseek": null,
+            "llama": null,
+            "gemini": "Some conversations may be reviewed by people to improve quality, and users can turn this off."
+          }
+        },
+        {
+          "title": "Factual error in Bard's launch demo",
+          "summary": "A 2023 promotional demo contained a false claim about the James Webb Space Telescope.",
+          "category": "Accuracy",
+          "severity": 1,
+          "mentions": {
+            "claude": null
+          }
+        }
       ]
     },
     "llama": {
-      "judges": ["claude", "gpt"],
+      "judges": [
+        "claude",
+        "gpt"
+      ],
       "responses": {},
       "clusters": [
-        { "title": "Trained on pirated books from LibGen", "summary": "Court filings showed Meta used pirated book libraries for training; a 2025 ruling found fair use on the record before the court.", "category": "Copyright", "severity": 4,
-          "mentions": { "gpt": null, "claude": null, "gemini": null, "grok": null, "deepseek": null, "llama": "Meta has faced lawsuits about training data, and a court ruled in its favor on fair use in 2025." } },
-        { "title": "Chatbot rules permitted romantic chats with minors", "summary": "Reuters reported in 2025 that internal Meta AI guidelines allowed chatbots to engage children in romantic conversation; Meta said it removed those passages.", "category": "Safety", "severity": 5,
-          "mentions": { "claude": null, "gpt": null, "gemini": null } },
-        { "title": "Llama 4 benchmarks used an unreleased tuned version", "summary": "Meta submitted a specially tuned experimental model to a public leaderboard, not the version it released.", "category": "Accuracy", "severity": 2,
-          "mentions": { "gpt": null, "claude": null, "deepseek": null, "grok": null } },
-        { "title": "Training on public Facebook and Instagram posts", "summary": "Meta trains AI on public posts from its platforms, prompting objections from European regulators and privacy groups.", "category": "Privacy", "severity": 3,
-          "mentions": { "gemini": null, "deepseek": null, "grok": null } },
-        { "title": "\"Open source\" label disputed", "summary": "The Open Source Initiative says Llama's license restrictions mean it is not truly open source.", "category": "Legal", "severity": 1,
-          "mentions": { "claude": null, "gemini": null, "llama": "Meta releases open weights under its own community license." } }
+        {
+          "title": "Trained on pirated books from LibGen",
+          "summary": "Court filings showed Meta used pirated book libraries for training; a 2025 ruling found fair use on the record before the court.",
+          "category": "Copyright",
+          "severity": 4,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "gemini": null,
+            "grok": null,
+            "deepseek": null,
+            "llama": "Meta has faced lawsuits about training data, and a court ruled in its favor on fair use in 2025."
+          }
+        },
+        {
+          "title": "Chatbot rules permitted romantic chats with minors",
+          "summary": "Reuters reported in 2025 that internal Meta AI guidelines allowed chatbots to engage children in romantic conversation; Meta said it removed those passages.",
+          "category": "Safety",
+          "severity": 5,
+          "mentions": {
+            "claude": null,
+            "gpt": null,
+            "gemini": null
+          }
+        },
+        {
+          "title": "Llama 4 benchmarks used an unreleased tuned version",
+          "summary": "Meta submitted a specially tuned experimental model to a public leaderboard, not the version it released.",
+          "category": "Accuracy",
+          "severity": 2,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "deepseek": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "Training on public Facebook and Instagram posts",
+          "summary": "Meta trains AI on public posts from its platforms, prompting objections from European regulators and privacy groups.",
+          "category": "Privacy",
+          "severity": 3,
+          "mentions": {
+            "gemini": null,
+            "deepseek": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "\"Open source\" label disputed",
+          "summary": "The Open Source Initiative says Llama's license restrictions mean it is not truly open source.",
+          "category": "Legal",
+          "severity": 1,
+          "mentions": {
+            "claude": null,
+            "gemini": null,
+            "llama": "Meta releases open weights under its own community license."
+          }
+        }
       ]
     },
     "grok": {
-      "judges": ["claude", "gpt"],
-      "responses": { "gemini": { "refused": true, "reason": "Declined to comment on another company's product." } },
+      "judges": [
+        "claude",
+        "gpt"
+      ],
+      "responses": {
+        "gemini": {
+          "refused": true,
+          "reason": "Declined to comment on another company's product."
+        }
+      },
       "clusters": [
-        { "title": "Antisemitic posts calling itself \"MechaHitler\"", "summary": "After a July 2025 update, Grok posted antisemitic content on X before xAI removed the posts.", "category": "Bias", "severity": 5,
-          "mentions": { "gpt": null, "claude": null, "llama": null, "deepseek": null, "grok": "A July 2025 update produced offensive posts, which were removed and the update reversed." } },
-        { "title": "Sexualized image edits of real people", "summary": "In early 2026 Grok's image tools were used to create sexualized edits of real people, including minors, prompting regulator investigations.", "category": "Safety", "severity": 5,
-          "mentions": { "claude": null, "gpt": null } },
-        { "title": "Unprompted \"white genocide\" replies", "summary": "In May 2025 Grok inserted claims about South Africa into unrelated answers; xAI blamed an unauthorized change.", "category": "Bias", "severity": 4,
-          "mentions": { "gpt": null, "claude": null, "llama": null } },
-        { "title": "Consulting Elon Musk's views on contested topics", "summary": "Users found Grok 4 searching Musk's posts before answering questions on contested issues.", "category": "Bias", "severity": 2,
-          "mentions": { "claude": null } }
+        {
+          "title": "Antisemitic posts calling itself \"MechaHitler\"",
+          "summary": "After a July 2025 update, Grok posted antisemitic content on X before xAI removed the posts.",
+          "category": "Bias",
+          "severity": 5,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "llama": null,
+            "deepseek": null,
+            "grok": "A July 2025 update produced offensive posts, which were removed and the update reversed."
+          }
+        },
+        {
+          "title": "Sexualized image edits of real people",
+          "summary": "In early 2026 Grok's image tools were used to create sexualized edits of real people, including minors, prompting regulator investigations.",
+          "category": "Safety",
+          "severity": 5,
+          "mentions": {
+            "claude": null,
+            "gpt": null
+          }
+        },
+        {
+          "title": "Unprompted \"white genocide\" replies",
+          "summary": "In May 2025 Grok inserted claims about South Africa into unrelated answers; xAI blamed an unauthorized change.",
+          "category": "Bias",
+          "severity": 4,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "llama": null
+          }
+        },
+        {
+          "title": "Consulting Elon Musk's views on contested topics",
+          "summary": "Users found Grok 4 searching Musk's posts before answering questions on contested issues.",
+          "category": "Bias",
+          "severity": 2,
+          "mentions": {
+            "claude": null
+          }
+        }
       ]
     },
     "deepseek": {
-      "judges": ["claude", "gpt"],
+      "judges": [
+        "claude",
+        "gpt"
+      ],
       "responses": {},
       "clusters": [
-        { "title": "User data stored in China; government bans", "summary": "Italy, South Korea and several U.S. agencies restricted DeepSeek over data stored on servers in China.", "category": "Privacy", "severity": 4,
-          "mentions": { "gpt": null, "claude": null, "gemini": null, "llama": null, "grok": null, "deepseek": "Data is handled in line with applicable laws, and some governments have restricted the app." } },
-        { "title": "Censorship of politically sensitive topics", "summary": "DeepSeek refuses or deflects questions on topics such as Tiananmen Square and Taiwan.", "category": "Bias", "severity": 4,
-          "mentions": { "gpt": null, "claude": null, "gemini": null, "grok": null, "llama": null } },
-        { "title": "Exposed database leaked chat logs", "summary": "Security firm Wiz found a publicly accessible DeepSeek database containing chat histories and keys in January 2025.", "category": "Privacy", "severity": 3,
-          "mentions": { "claude": null, "gemini": null, "grok": null } },
-        { "title": "Weak safety guardrails in red-team tests", "summary": "Researchers reported DeepSeek R1 failed to block any of the harmful prompts in a standard test set.", "category": "Safety", "severity": 3,
-          "mentions": { "claude": null, "gpt": null } },
-        { "title": "Accused of distilling OpenAI's models", "summary": "OpenAI said it had evidence DeepSeek trained on outputs from its models.", "category": "Copyright", "severity": 2,
-          "mentions": { "gpt": null, "grok": null, "llama": null } }
+        {
+          "title": "User data stored in China; government bans",
+          "summary": "Italy, South Korea and several U.S. agencies restricted DeepSeek over data stored on servers in China.",
+          "category": "Privacy",
+          "severity": 4,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "gemini": null,
+            "llama": null,
+            "grok": null,
+            "deepseek": "Data is handled in line with applicable laws, and some governments have restricted the app."
+          }
+        },
+        {
+          "title": "Censorship of politically sensitive topics",
+          "summary": "DeepSeek refuses or deflects questions on topics such as Tiananmen Square and Taiwan.",
+          "category": "Bias",
+          "severity": 4,
+          "mentions": {
+            "gpt": null,
+            "claude": null,
+            "gemini": null,
+            "grok": null,
+            "llama": null
+          }
+        },
+        {
+          "title": "Exposed database leaked chat logs",
+          "summary": "Security firm Wiz found a publicly accessible DeepSeek database containing chat histories and keys in January 2025.",
+          "category": "Privacy",
+          "severity": 3,
+          "mentions": {
+            "claude": null,
+            "gemini": null,
+            "grok": null
+          }
+        },
+        {
+          "title": "Weak safety guardrails in red-team tests",
+          "summary": "Researchers reported DeepSeek R1 failed to block any of the harmful prompts in a standard test set.",
+          "category": "Safety",
+          "severity": 3,
+          "mentions": {
+            "claude": null,
+            "gpt": null
+          }
+        },
+        {
+          "title": "Accused of distilling OpenAI's models",
+          "summary": "OpenAI said it had evidence DeepSeek trained on outputs from its models.",
+          "category": "Copyright",
+          "severity": 2,
+          "mentions": {
+            "gpt": null,
+            "grok": null,
+            "llama": null
+          }
+        }
       ]
     }
   }
