@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pick Your Poison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: an apothecary cabinet. Model bottles on a wooden shelf; the chosen bottle's
+   findings are printed on a pharmacy label sheet below. Single theme by choice. */
+:root {
+  --wood: #1d140f;
+  --wood-hi: #2e2018;
+  --paper: #efe6cd;
+  --paper-2: #e3d6b5;
+  --ink: #241b14;
+  --muted: #6c5d48;
+  --rule: #b6a37f;
+  --poison: #a3271e;
+  --display: "IM Fell English SC", "IM Fell English", Georgia, "Times New Roman", serif;
+  --serif: "IM Fell English", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--wood); }
+body {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--paper);
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 2px, transparent 2px 9px, rgba(0,0,0,.05) 9px 10px, transparent 10px 23px),
+    radial-gradient(120% 60% at 50% 0%, var(--wood-hi), var(--wood) 70%);
+  min-height: 100%;
+}
+button, input { font: inherit; }
+:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+/* Masthead */
+.masthead { padding: 40px 0 8px; display: grid; gap: 14px; }
+.kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--rule); margin: 0; }
+h1 {
+  font-family: var(--display); font-weight: 400; margin: 0;
+  font-size: clamp(3.2rem, 10vw, 7.4rem); line-height: .86; letter-spacing: .01em;
+  text-wrap: balance;
+}
+h1 em { font-style: normal; color: #d4483c; }
+.lede { font-family: var(--serif); font-style: italic; font-size: 1.3rem; margin: 0; max-width: 46ch; color: var(--paper-2); }
+.status { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 6px; }
+.pill { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border: 1px solid var(--rule); border-radius: 999px; color: var(--paper-2); }
+.pill.demo { border-color: #d4483c; color: #f0b3a8; }
+.btn {
+  border: 1px solid var(--paper-2); background: transparent; color: var(--paper);
+  padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;
+}
+.btn:hover { background: rgba(239,230,205,.08); }
+.btn.solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.btn.solid:hover { background: #fff7e0; }
+.btn.ink { border-color: var(--ink); color: var(--ink); }
+.btn.ink.solid { background: var(--ink); color: var(--paper); }
+
+/* Shelf */
+.shelf {
+  margin-top: 26px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
+  gap: 18px 26px; padding: 30px 12px 0;
+  border-bottom: 16px solid #4a3426; box-shadow: 0 10px 0 #2a1d15, 0 22px 30px rgba(0,0,0,.5);
+}
+.bottle {
+  --glass: #555;
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink);
+  transition: transform .25s ease;
+}
+.bottle:hover { transform: translateY(-4px); }
+.bottle .cork {
+  width: 26px; height: 18px; border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(90deg, #7a5a3a, #a07a52 45%, #6e5034);
+  transition: transform .35s cubic-bezier(.3,1.6,.5,1);
+}
+.bottle .neck {
+  width: 32px; height: 26px; margin-top: -2px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--glass) 70%, black), var(--glass) 40%, color-mix(in srgb, var(--glass) 75%, white) 55%, var(--glass) 70%);
+  border-radius: 3px 3px 0 0;
+}
+.bottle .body {
+  position: relative; width: 116px; height: 150px; display: grid; place-items: center;
+  background:
+    linear-gradient(100deg, transparent 18%, rgba(255,255,255,.28) 22%, transparent 30%),
+    linear-gradient(90deg, color-mix(in srgb, var(--glass) 60%, black), var(--glass) 35%, color-mix(in srgb, var(--glass) 80%, white) 60%, color-mix(in srgb, var(--glass) 70%, black));
+  border-radius: 34px 34px 12px 12px;
+  box-shadow: inset 0 -10px 18px rgba(0,0,0,.35);
+}
+.bottle[data-shape="1"] .body { width: 100px; height: 168px; border-radius: 18px 18px 8px 8px; }
+.bottle[data-shape="2"] .body { width: 128px; height: 136px; border-radius: 60px 60px 18px 18px; }
+.label {
+  width: 84%; background: var(--paper); border: 1px solid var(--ink); outline: 3px double var(--paper); outline-offset: -6px;
+  padding: 9px 4px 7px; text-align: center; display: grid; gap: 1px;
+}
+.label .no { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.label .nm { font-family: var(--display); font-size: 22px; line-height: 1; }
+.label .co { font-size: 11px; color: var(--muted); }
+.bottle[aria-pressed="true"] { transform: translateY(-10px); }
+.bottle[aria-pressed="true"] .cork { transform: translate(14px, -16px) rotate(24deg); }
+.bottle[aria-pressed="true"] .label { background: #fff3d6; }
+.bottle[aria-pressed="true"]::after {
+  content: ""; position: absolute; bottom: -12px; left: 15%; right: 15%; height: 4px; border-radius: 4px; background: #d4483c;
+}
+
+/* The label sheet */
+.sheet {
+  margin: 44px auto 0; background: var(--paper); color: var(--ink);
+  border: 1px solid var(--ink); outline: 4px double var(--paper); outline-offset: 6px;
+  padding: clamp(18px, 3.5vw, 40px);
+}
+.demo-note {
+  border-left: 4px solid var(--poison); background: var(--paper-2); padding: 10px 14px; margin: 0 0 22px; font-size: 14px;
+}
+.sheet-head { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+.sheet-head h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 5vw, 3.2rem); margin: 0; line-height: 1; }
+.sheet-head h2 small { font-family: var(--serif); font-style: italic; font-size: .5em; color: var(--muted); }
+.tally { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; }
+.tally b { font-family: var(--mono); font-size: 20px; font-weight: 500; display: block; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; }
+.filters button {
+  border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 999px;
+  padding: 3px 12px; font-size: 13px; cursor: pointer;
+}
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 32px; margin-top: 20px; }
+@media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+.col-title { font-family: var(--display); font-size: 1.5rem; margin: 0 0 4px; font-weight: 400; }
+.col-sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+.self { border: 1px solid var(--rule); padding: 16px; background: #f6efd9; display: grid; gap: 14px; align-content: start; }
+.self ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.self li { display: grid; gap: 2px; }
+.self .quote { font-family: var(--serif); font-size: 1.08rem; line-height: 1.35; }
+.self .meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.omitted { border-top: 1px dashed var(--rule); padding-top: 12px; }
+.omitted h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--poison); }
+.omitted li { font-size: 14px; }
+.declined { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+.cards { display: grid; gap: 14px; }
+.card { border: 1px solid var(--ink); padding: 14px 16px; display: grid; gap: 8px; background: var(--paper); position: relative; }
+.card::before { content: ""; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 5px; background: var(--sev-color, var(--rule)); }
+.card-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cat { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.consensus { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 3px; }
+.consensus.wide { background: var(--ink); color: var(--paper); }
+.consensus.some { border: 1px solid var(--ink); }
+.consensus.lone { border: 1px dashed var(--poison); color: var(--poison); }
+.admits { font-size: 12px; font-weight: 600; color: #2f6b4f; }
+.card h3 { margin: 0; font-size: 1.12rem; line-height: 1.3; text-wrap: balance; }
+.card p { margin: 0; font-size: 15px; }
+.card-foot { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; border: 1px solid var(--rule); border-radius: 999px; padding: 1px 9px 1px 4px; background: #f8f2e0; }
+.chip i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); }
+.sev { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.dots { display: inline-flex; gap: 3px; }
+.dots span { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink); }
+.dots span.on { background: var(--ink); }
+.dots span.half { background: linear-gradient(90deg, var(--ink) 50%, transparent 50%); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+details { font-size: 14px; }
+details summary { cursor: pointer; color: var(--muted); }
+details ul { margin: 6px 0 0; padding-left: 18px; }
+.empty { font-style: italic; color: var(--muted); }
+
+/* Leaderboard + grid */
+.section { margin-top: 56px; }
+.section h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 4px; }
+.section .intro { color: var(--paper-2); max-width: 70ch; margin: 0 0 18px; }
+.board-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; }
+@media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; } }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(182,163,127,.35); }
+th { font-weight: 600; font-size: 12px; color: var(--rule); text-transform: uppercase; letter-spacing: .06em; vertical-align: bottom; }
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+th.n { text-align: right; }
+.gapbar { display: inline-block; height: 8px; background: #d4483c; vertical-align: middle; margin-left: 8px; border-radius: 2px; }
+.who { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.who i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
+.heat td, .heat th { text-align: center; border: 1px solid rgba(182,163,127,.25); padding: 6px; }
+.heat th.rh { text-align: left; }
+.heat td { font-family: var(--mono); font-size: 13px; }
+.heat td.self { outline: 2px solid var(--paper); outline-offset: -3px; }
+.heat td.na { color: var(--rule); font-family: var(--body); font-size: 11px; }
+.caption { font-size: 13px; color: var(--paper-2); margin-top: 8px; }
+
+/* Method */
+.method { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+@media (max-width: 860px) { .method { grid-template-columns: 1fr; } }
+.method ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--paper-2); }
+pre { background: #120c08; border: 1px solid #4a3426; padding: 14px; font-family: var(--mono); font-size: 12.5px; white-space: pre-wrap; color: var(--paper-2); margin: 0; overflow-x: auto; }
+footer { margin: 60px 0 40px; font-size: 13px; color: var(--rule); }
+
+/* Live-run dialog */
+dialog { border: 1px solid var(--ink); background: var(--paper); color: var(--ink); max-width: 560px; width: calc(100% - 32px); padding: 24px; }
+dialog::backdrop { background: rgba(10,6,4,.7); }
+dialog h3 { font-family: var(--display); font-weight: 400; font-size: 1.8rem; margin: 0 0 6px; }
+dialog p { margin: 0 0 12px; font-size: 14px; }
+.field { display: grid; gap: 4px; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
+.field input[type="text"], .field input[type="password"] { padding: 8px; border: 1px solid var(--ink); background: #fffaf0; color: var(--ink); font-weight: 400; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14px; margin-bottom: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.progress { height: 6px; background: var(--paper-2); margin: 12px 0 6px; }
+.progress div { height: 100%; width: 0; background: var(--poison); transition: width .2s; }
+.log { max-height: 180px; overflow: auto; font-family: var(--mono); font-size: 12px; margin: 0; padding-left: 18px; }
+.err { color: var(--poison); font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <p class="kicker">CS193T &middot; Thinking with AI &middot; Isaac Park</p>
+    <h1>Pick Your <em>Poison</em></h1>
+    <p class="lede">Choose a model. Every other model tells you what's wrong with it, and it gets to answer for itself.</p>
+    <div class="status" id="status"></div>
+  </header>
+
+  <nav class="shelf" id="shelf" aria-label="Choose a model"></nav>
+
+  <main class="sheet" id="sheet" aria-live="polite"></main>
+
+  <section class="section" id="board" aria-labelledby="board-title"></section>
+
+  <section class="section" aria-labelledby="method-title">
+    <h2 id="method-title">How it works</h2>
+    <div class="method">
+      <ol>
+        <li>Every model, including the one being examined, gets the same prompt, so differences in tone come from the model and not the question.</li>
+        <li>A judge model from a different company merges items that describe the same controversy, then two judges from other companies rate each one from 1 (minor) to 5 (severe). Their scores are averaged, so no company grades its own homework.</li>
+        <li>Raised by <span id="wide-n">3</span> or more rivals: <b>Widely reported</b>. Raised by one rival: <b>Unverified</b>. Models can be wrong or invent things, so treat everything here as an allegation to check.</li>
+        <li>Harshness = the total severity of the controversies a model raised about a target. Refusals are recorded, not hidden.</li>
+        <li>Results are cached in <code>data/results.json</code>. <b>Refresh live</b> reruns the queries through Hopscotch (about <span id="calls">54</span> API calls).</li>
+      </ol>
+      <pre id="prompt"></pre>
+    </div>
+  </section>
+
+  <footer>Model answers are allegations generated by AI, not verified facts. Check primary sources before repeating them.</footer>
+</div>
+
+<dialog id="live">
+  <form method="dialog" id="live-form">
+    <h3>Refresh live</h3>
+    <p>Runs every query through Hopscotch's OpenAI-compatible API. Your key stays in this browser.</p>
+    <label class="field" for="f-base">Base URL
+      <input type="text" id="f-base" placeholder="https://…/v1" autocomplete="off">
+    </label>
+    <label class="field" for="f-key">API key
+      <input type="password" id="f-key" autocomplete="off">
+    </label>
+    <label class="check" for="f-remember"><input type="checkbox" id="f-remember"> Remember the key on this device</label>
+    <div class="row">
+      <button type="button" class="btn ink solid" id="run">Run all queries</button>
+      <button type="button" class="btn ink" id="copy" hidden>Copy results JSON</button>
+      <button type="button" class="btn ink" id="close">Close</button>
+    </div>
+    <div class="progress" hidden id="prog"><div></div></div>
+    <p id="live-msg"></p>
+    <ol class="log" id="log"></ol>
+  </form>
+</dialog>
+
+<script type="module">
+import { CONFIG } from "./config.js";
+import { runAll, computeScores, accusePrompt } from "./pipeline.js";
+
+const state = { data: null, source: "bundled", selected: null, filter: "All", lastRun: null };
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (n) => (n == null ? "—" : (Math.round(n * 10) / 10).toFixed(1));
+const store = (kind = "localStorage") => { try { return window[kind]; } catch { return null; } };
+const get = (k, kind) => { try { return store(kind)?.getItem(k) ?? null; } catch { return null; } };
+const set = (k, v, kind) => { try { v == null ? store(kind)?.removeItem(k) : store(kind)?.setItem(k, v); } catch {} };
+
+const model = (id) => state.data.models.find((m) => m.id === id);
+
+async function load() {
+  let cached = null;
+  try { cached = JSON.parse(get("pyp-results") || "null"); } catch {}
+  if (cached?.targets) { state.data = cached; state.source = "live"; }
+  else {
+    try {
+      const r = await fetch("data/results.json");
+      state.data = await r.json();
+      state.source = "bundled";
+    } catch {
+      $("#sheet").innerHTML = `<p class="err">Couldn't load data/results.json. Serve this folder with a local web server (for example <code>npx serve</code>) rather than opening the file directly.</p>`;
+      return;
+    }
+  }
+  const h = location.hash.slice(1);
+  state.selected = state.data.models.some((m) => m.id === h) ? h : state.data.models[0].id;
+  render();
+}
+
+function render() {
+  renderStatus();
+  renderShelf();
+  renderSheet();
+  renderBoard();
+}
+
+function renderStatus() {
+  const d = state.data;
+  const when = new Date(d.meta.generatedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  const label = d.meta.demo ? "Demo data, not real model output" : state.source === "live" ? `Your live run · ${when}` : `Cached results · ${when}`;
+  $("#status").innerHTML = `
+    <span class="pill ${d.meta.demo ? "demo" : ""}">${esc(label)}</span>
+    <button class="btn solid" id="open-live" type="button">Refresh live</button>
+    ${state.source === "live" ? `<button class="btn" id="reset" type="button">Back to cached results</button>` : ""}`;
+  $("#open-live").onclick = openLive;
+  const reset = $("#reset");
+  if (reset) reset.onclick = () => { set("pyp-results", null); state.data = null; load(); };
+}
+
+function renderShelf() {
+  $("#shelf").innerHTML = state.data.models.map((m, i) => `
+    <button class="bottle" type="button" data-id="${esc(m.id)}" data-shape="${i % 3}" style="--glass:${esc(m.glass || "#666")}"
+      aria-pressed="${m.id === state.selected}" aria-label="${esc(m.name)} by ${esc(m.company)}">
+      <span class="cork"></span><span class="neck"></span>
+      <span class="body"><span class="label">
+        <span class="no">No. ${i + 1}</span><span class="nm">${esc(m.name)}</span><span class="co">${esc(m.company)}</span>
+      </span></span>
+    </button>`).join("");
+  $("#shelf").querySelectorAll(".bottle").forEach((b) => b.addEventListener("click", () => select(b.dataset.id)));
+}
+
+function select(id) {
+  state.selected = id;
+  state.filter = "All";
+  if (location.hash.slice(1) !== id) history.replaceState(null, "", "#" + id);
+  renderShelf();
+  renderSheet();
+}
+window.addEventListener("hashchange", () => {
+  const h = location.hash.slice(1);
+  if (state.data?.models.some((m) => m.id === h) && h !== state.selected) select(h);
+});
+
+const sevColor = (s) => (s >= 4.5 ? "#7e1912" : s >= 3.5 ? "#a3271e" : s >= 2.5 ? "#c0663a" : s >= 1.5 ? "#c9a24a" : "#b6a37f");
+function dots(s) {
+  if (s == null) return `<span class="sev">Not rated</span>`;
+  let out = "";
+  for (let i = 1; i <= 5; i++) out += `<span class="${s >= i ? "on" : s >= i - 0.5 ? "half" : ""}"></span>`;
+  return `<span class="sev">Severity <span class="dots" aria-hidden="true">${out}</span><span class="num">${fmt(s)}</span></span>`;
+}
+const chip = (id) => { const m = model(id); return m ? `<span class="chip" style="--c:${esc(m.glass)}"><i></i>${esc(m.name)}</span>` : ""; };
+
+function renderSheet() {
+  const d = state.data, sel = state.selected, m = model(sel);
+  const T = d.targets[sel] || { clusters: [], responses: {} };
+  const rivals = d.models.filter((x) => x.id !== sel).map((x) => x.id);
+  const wide = CONFIG.widelyReported;
+  const resp = T.responses || {};
+
+  const all = (T.clusters || []).map((c) => ({ ...c, by: Object.keys(c.mentions || {}).filter((a) => a !== sel), self: (c.mentions || {})[sel] }));
+  const selfHas = all.filter((c) => sel in (c.mentions || {}));
+  const rivalCards = all.filter((c) => c.by.length).sort((a, b) => b.by.length - a.by.length || (b.severity || 0) - (a.severity || 0));
+  const omitted = rivalCards.filter((c) => c.by.length >= wide && !(sel in (c.mentions || {})));
+  const declined = rivals.filter((a) => resp[a]?.refused || resp[a]?.error);
+  const selfResp = resp[sel];
+
+  const cats = ["All", ...new Set(rivalCards.map((c) => c.category))];
+  const shown = state.filter === "All" ? rivalCards : rivalCards.filter((c) => c.category === state.filter);
+
+  const selfBlock = selfResp?.refused
+    ? `<p class="empty">${esc(m.name)} declined to discuss itself: “${esc(selfResp.reason)}”</p>`
+    : selfResp?.error
+    ? `<p class="err">The request to ${esc(m.name)} failed: ${esc(selfResp.error)}</p>`
+    : selfHas.length
+    ? `<ul>${selfHas.map((c) => `<li><span class="quote">${esc(c.self || c.summary)}</span>
+        <span class="meta"><span class="cat">${esc(c.category)}</span>${dots(c.severity)}</span></li>`).join("")}</ul>`
+    : `<p class="empty">${esc(m.name)} didn't name any controversies about itself.</p>`;
+
+  const cards = shown.map((c) => {
+    const n = c.by.length;
+    const cls = n >= wide ? "wide" : n === 1 ? "lone" : "some";
+    const text = n >= wide ? `Widely reported · ${n} of ${rivals.length}` : n === 1 ? `Unverified · 1 of ${rivals.length}` : `Raised by ${n} of ${rivals.length}`;
+    const wordings = c.by.filter((a) => c.mentions[a]).map((a) => `<li><b>${esc(model(a)?.name)}:</b> ${esc(c.mentions[a])}</li>`);
+    return `<article class="card" style="--sev-color:${sevColor(c.severity || 0)}">
+      <div class="card-top">
+        <span class="tags"><span class="consensus ${cls}">${text}</span><span class="cat">${esc(c.category)}</span></span>
+        ${c.self != null || sel in (c.mentions || {}) ? `<span class="admits">${esc(m.name)} admits this too</span>` : ""}
+      </div>
+      <h3>${esc(c.title)}</h3>
+      <p>${esc(c.summary)}</p>
+      <div class="card-foot"><span class="chips" aria-label="Raised by">${c.by.map(chip).join("")}</span>${dots(c.severity)}</div>
+      ${wordings.length ? `<details><summary>How each model put it</summary><ul>${wordings.join("")}</ul></details>` : ""}
+    </article>`;
+  }).join("");
+
+  $("#sheet").innerHTML = `
+    ${d.meta.demo ? `<p class="demo-note"><b>Demo data.</b> These are real, publicly reported controversies, but which model raised each one, the self-descriptions and the severity scores were written by hand to show the layout. Click <b>Refresh live</b> or run <code>scripts/generate.mjs</code> to get real answers.</p>` : ""}
+    <div class="sheet-head">
+      <h2>${esc(m.name)} <small>by ${esc(m.company)}</small></h2>
+      <div class="tally">
+        <span><b>${rivalCards.length}</b>raised by rivals</span>
+        <span><b>${rivalCards.filter((c) => c.by.length >= wide).length}</b>widely reported</span>
+        <span><b>${selfHas.length}</b>admitted by ${esc(m.name)}</span>
+        <span><b>${declined.length}</b>rivals declined</span>
+      </div>
+    </div>
+    <div class="cols">
+      <section aria-labelledby="self-title">
+        <h3 class="col-title" id="self-title">In its own words</h3>
+        <p class="col-sub">What ${esc(m.name)} said when asked the same question about itself.</p>
+        <div class="self">
+          ${selfBlock}
+          ${omitted.length ? `<div class="omitted"><h4>Widely reported, but ${esc(m.name)} left it out</h4><ul>${omitted.map((c) => `<li>${esc(c.title)}</li>`).join("")}</ul></div>` : ""}
+        </div>
+      </section>
+      <section aria-labelledby="rivals-title">
+        <h3 class="col-title" id="rivals-title">What rivals say</h3>
+        <p class="col-sub">Merged across ${rivals.length} rival models, most agreed-upon first.</p>
+        <div class="filters" role="group" aria-label="Filter by category">
+          ${cats.map((c) => `<button type="button" data-cat="${esc(c)}" aria-pressed="${c === state.filter}">${esc(c)}</button>`).join("")}
+        </div>
+        <div class="cards">${cards || `<p class="empty">No controversies in this category.</p>`}</div>
+        ${declined.length ? `<p class="declined">${declined.map((a) => `${esc(model(a)?.name)} ${resp[a].refused ? `declined: “${esc(resp[a].reason)}”` : `failed: ${esc(resp[a].error)}`}`).join(" · ")}</p>` : ""}
+      </section>
+    </div>`;
+  $("#sheet").querySelectorAll(".filters button").forEach((b) => b.addEventListener("click", () => { state.filter = b.dataset.cat; renderSheet(); }));
+}
+
+function renderBoard() {
+  const d = state.data;
+  const { matrix, rows, max } = computeScores(d);
+  const sorted = [...rows].sort((a, b) => (b.gap ?? -99) - (a.gap ?? -99));
+  const maxGap = Math.max(1, ...rows.map((r) => Math.abs(r.gap || 0)));
+  const who = (id) => { const m = model(id); return `<span class="who" style="--c:${esc(m.glass)}"><i></i>${esc(m.name)}</span>`; };
+
+  $("#board").innerHTML = `
+    <h2 id="board-title">Harshness leaderboard</h2>
+    <p class="intro">Who goes easy on themselves? The self-softness gap is how much harsher rivals are about a model than the model is about itself. Bigger gap, softer on itself.</p>
+    <div class="board-grid">
+      <div class="scroll"><table>
+        <thead><tr><th>Model</th><th class="n">Rivals on it<br>(avg)</th><th class="n">It on itself</th><th class="n">Self-softness gap</th><th class="n">It on rivals<br>(avg)</th><th class="n">Declined</th></tr></thead>
+        <tbody>${sorted.map((r) => `<tr>
+          <td>${who(r.id)}</td><td class="n">${fmt(r.received)}</td><td class="n">${fmt(r.self)}</td>
+          <td class="n">${fmt(r.gap)}<span class="gapbar" style="width:${Math.round(Math.max(0, r.gap || 0) / maxGap * 60)}px"></span></td>
+          <td class="n">${fmt(r.given)}</td><td class="n">${r.declined}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <div class="scroll">
+        <table class="heat">
+          <thead><tr><th class="rh">Asked ↓ / about →</th>${d.models.map((m) => `<th>${esc(m.name)}</th>`).join("")}</tr></thead>
+          <tbody>${d.models.map((a) => `<tr><th class="rh">${esc(a.name)}</th>${d.models.map((t) => {
+            const v = matrix[a.id][t.id];
+            if (v == null) return `<td class="na${a.id === t.id ? " self" : ""}">declined</td>`;
+            const alpha = max ? (0.12 + 0.78 * v / max).toFixed(2) : 0;
+            return `<td class="${a.id === t.id ? "self" : ""}" style="background:rgba(196,52,40,${alpha})">${fmt(v)}</td>`;
+          }).join("")}</tr>`).join("")}</tbody>
+        </table>
+        <p class="caption">Each cell is the total severity of what the row model raised about the column model. Outlined cells are a model talking about itself.</p>
+      </div>
+    </div>`;
+}
+
+/* Live run */
+function openLive() {
+  $("#f-base").value = get("pyp-base") || CONFIG.baseURL || "";
+  $("#f-key").value = get("pyp-key") || get("pyp-key", "sessionStorage") || "";
+  $("#f-remember").checked = !!get("pyp-key");
+  $("#live-msg").textContent = "";
+  $("#live").showModal();
+}
+$("#close").onclick = () => $("#live").close();
+$("#copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(JSON.stringify(state.lastRun, null, 2)); $("#live-msg").textContent = "Copied. Paste it into data/results.json to share it with every visitor."; }
+  catch { $("#live-msg").textContent = "Your browser blocked copying. Use scripts/generate.mjs to save results instead."; }
+};
+$("#run").onclick = async () => {
+  const baseURL = $("#f-base").value.trim(), apiKey = $("#f-key").value.trim();
+  if (!baseURL || !apiKey) { $("#live-msg").innerHTML = `<span class="err">Enter the base URL and API key from your Hopscotch dashboard.</span>`; return; }
+  set("pyp-base", baseURL);
+  if ($("#f-remember").checked) { set("pyp-key", apiKey); set("pyp-key", null, "sessionStorage"); }
+  else { set("pyp-key", null); set("pyp-key", apiKey, "sessionStorage"); }
+
+  const run = $("#run"), log = $("#log"), bar = $("#prog div");
+  run.disabled = true; log.innerHTML = ""; $("#prog").hidden = false; bar.style.width = "0";
+  $("#live-msg").textContent = "Running…";
+  let failures = 0;
+  try {
+    const result = await runAll({ baseURL, apiKey }, CONFIG, (done, total, label, r) => {
+      bar.style.width = `${(done / total) * 100}%`;
+      if (r?.error) failures++;
+      const li = document.createElement("li");
+      li.textContent = label + (r?.error ? ` — failed: ${r.error}` : r?.refused ? ` — declined` : "");
+      if (r?.error) li.className = "err";
+      log.prepend(li);
+    });
+    if (failures === CONFIG.models.length ** 2) throw new Error("every request failed");
+    state.lastRun = result;
+    set("pyp-results", JSON.stringify(result));
+    state.data = result; state.source = "live";
+    render();
+    $("#copy").hidden = false;
+    $("#live-msg").textContent = failures ? `Done, with ${failures} failed requests (shown as “declined”).` : "Done. Results are saved in this browser.";
+  } catch (err) {
+    $("#live-msg").innerHTML = `<span class="err">Couldn't reach the API (${esc(err.message)}). Pages viewed on claude.ai can't make outside requests, and some APIs block browsers. Run <code>node scripts/generate.mjs</code> instead, or host the site on GitHub Pages.</span>`;
+  } finally {
+    run.disabled = false;
+  }
+};
+
+$("#prompt").textContent = accusePrompt({ name: "[Model]", company: "[Company]" }, CONFIG.categories, CONFIG.maxItems);
+$("#wide-n").textContent = CONFIG.widelyReported;
+$("#calls").textContent = CONFIG.models.length ** 2 + CONFIG.models.length * (1 + CONFIG.judgeCount);
+
+load();
+</script>
+</body>
+</html>
